@@ -1,0 +1,185 @@
+#:kivy 2.3.0
+
+<RuleTextField>:
+    input_filter: 'int'
+    input_type: 'number'
+    multiline: False
+    hint_text: ""
+    mode: "filled"
+    theme_bg_color: "Custom"
+    fill_color_normal: 0, 0, 0, 0
+    fill_color_focus: 0, 0, 0, 0
+
+<BuiltInObjectCard>
+    padding: "0dp"
+    size_hint: None, None
+    size: "250dp", "250dp"
+    theme_bg_color: "Custom"
+    style: "outlined"
+
+    MDRelativeLayout:
+
+        MDBoxLayout:
+            id: board
+
+        MDLabel:
+            text: root.name
+            adaptive_size: True
+            color: "white"
+            pos: "12dp", "24dp"
+            bold: True
+            role: "large"
+
+        MDLabel:
+            text: root.prefer_rule
+            adaptive_size: True
+            color: "white"
+            pos: "12dp", "8dp"
+            role: "medium"
+
+        MDIconButton:
+            on_press: root.add_obj_handler()
+            icon: "plus"
+            style: "filled"
+            pos: root.width - 90, 10
+
+<MainLayout>
+    start_stop_btn: start_stop_btn
+    left_rule_text_field: left_rule_text_field
+    right_rule_text_field: right_rule_text_field
+    select_board_size_button: select_board_size_button
+    speed_slider: speed_slider
+
+    MDRelativeLayout:
+        canvas:
+            Color:
+                rgb: app.theme_cls.backgroundColor
+
+            Rectangle:
+                size: self.size
+
+        background_color: .9, .9, .9
+        orientation: 'vertical'
+        size_hint: None, 1
+        width: 700
+        pos_hint: {"right": 1.0 if root.is_settings_open else 0.0}
+
+        MDGridLayout:
+            cols: 1
+            size_hint: 1, 1
+            spacing: 20
+            padding: 50, 50
+
+            MDBoxLayout:
+                size_hint: 1, None
+
+                MDLabel:
+                    text: "Rozmiar komórki:  "
+                    adaptive_height: True
+                    pos_hint: {'center_y': .39}
+                    adaptive_size: True
+                    theme_text_color: "Custom"
+                    text_color: "white"
+
+                MDBoxLayout:
+                    orientation: 'vertical'
+                    size_hint: None, None
+                    width: 200
+
+                    MDButton:
+                        theme_width: "Custom"
+                        theme_bg_color: "Custom"
+                        md_bg_color: 0, 0, 0, 0
+                        size_hint_x: 1
+                        id: select_board_size_button
+                        on_press: root.menu.open()
+                        style: 'text'
+                        radius: 0 
+
+                        MDButtonText:
+                            pos_hint: {"center_x": .5, "center_y": .5}
+                            text: root.size_name
+
+                    MDDivider:
+                        adaptive_height: True
+                        divider_width: 5
+                        color: app.theme_cls.primaryColor
+
+            MDLabel:
+                text: 'Prędkość: '
+                adaptive_size: True
+                color: "white"
+                padding: 0, 10
+
+            MDSlider:
+                id: speed_slider
+                min: 1
+                max: 50
+                step: 5
+                value: root.default_speed
+                on_value_pos: root.on_speed_slider_touch_down()
+
+                MDSliderHandle:
+            
+            MDLabel:
+                text: 'Reguły: '
+                adaptive_size: True
+                color: "white"
+                padding: 0, 10
+                    
+            MDBoxLayout:
+                size_hint: 1, None
+                orientation: 'horizontal'
+
+                RuleTextField:
+                    halign: 'right'
+                    id: left_rule_text_field
+
+                MDLabel:
+                    text: "/"
+                    adaptive_size: True
+                    role: "large"
+                    padding: 5, 21
+                    halign: 'center'
+                    
+                RuleTextField:
+                    id: right_rule_text_field
+
+            MDBoxLayout:
+                size_hint: 1, None
+                spacing: 20
+
+                MDButton:
+                    text: "Wyzeruj plansze"
+                    icon: "close"
+                    on_press: root.open_built_in_objects_dialog()
+                    style: 'outlined'
+
+                    MDButtonText:
+                        text: "Zobacz objekty"
+                MDButton:
+                    text: "Wyzeruj plansze"
+                    icon: "close"
+                    on_press: root.clear_board()
+                    style: 'outlined'
+
+                    MDButtonText:
+                        text: "Wyzeruj plansze"
+
+    MDIconButton:
+        icon: "close" if root.is_settings_open else "cog"
+        pos: root.width - 90, root.height - 90
+        on_press: root.is_settings_open = not root.is_settings_open
+        theme_bg_color: "Custom"
+        theme_icon_color: "Custom"
+        icon_color: app.theme_cls.primaryColor
+        style: "standard"  
+
+    MDIconButton:
+        icon: "pause" if root.is_playing else "play"
+        style: "standard"  
+        id: start_stop_btn
+        on_press: root.start_stop_game()
+        pos: root.width - 180, root.height - 90
+        theme_icon_color: "Custom"
+        icon_color: app.theme_cls.primaryColor
