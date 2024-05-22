@@ -110,16 +110,17 @@
                 adaptive_size: True
                 color: "white"
                 padding: 0, 10
-
-            MDSlider:
-                id: speed_slider
-                min: 1
-                max: 50
-                step: 5
-                value: root.default_speed
-                on_value_pos: root.on_speed_slider_touch_down()
-
-                MDSliderHandle:
+            
+            MDBoxLayout:
+                size_hint: 1, None
+                
+                MDSlider:
+                    id: speed_slider
+                    min: 1
+                    max: 50
+                    value: root.default_speed
+                    on_value_pos: root.on_speed_slider_touch_down()
+                    MDSliderHandle:
             
             MDLabel:
                 text: 'Reguły: '
